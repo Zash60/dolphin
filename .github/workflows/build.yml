@@ -32,6 +32,15 @@ jobs:
       uses: android-actions/setup-android@v3
       with:
         packages: 'platform-tools platforms;android-36 build-tools;36.0.0 ndk;29.0.14206865'
+        
+    - name: Display Android SDK info
+      run: |
+        echo "ANDROID_HOME: $ANDROID_HOME"
+        echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
+        echo "SDK Path: ${{ steps.setup-android.outputs.sdk-path }}"
+        ls -la $ANDROID_HOME
+        ls -la $ANDROID_HOME/platforms/ 2>/dev/null || echo "No platforms found"
+        ls -la $ANDROID_HOME/build-tools/ 2>/dev/null || echo "No build-tools found"
       
     - name: Cache Gradle packages
       uses: actions/cache@v4
@@ -44,11 +53,24 @@ jobs:
           ${{ runner.os }}-gradle-
           
     - name: Create local.properties
-      run: echo "sdk.dir=${{ steps.setup-android.outputs.sdk-path }}" > ./Source/Android/local.properties
+      run: |
+        if [ -n "${{ steps.setup-android.outputs.sdk-path }}" ]; then
+          echo "sdk.dir=${{ steps.setup-android.outputs.sdk-path }}" > ./Source/Android/local.properties
+        else
+          echo "sdk.dir=$ANDROID_HOME" > ./Source/Android/local.properties
+        fi
+        cat ./Source/Android/local.properties
       
     - name: Build Debug APK
-      run: chmod +x gradlew && ./gradlew assembleDebug
-      working-directory: ./Source/Android
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Contents of Source/Android:"
+        ls -la ./Source/Android/
+        echo "Contents of local.properties:"
+        cat ./Source/Android/local.properties
+        echo "Building APK..."
+        cd ./Source/Android
+        chmod +x gradlew && ./gradlew assembleDebug --stacktrace
       env:
         ANDROID_HOME: ${{ steps.setup-android.outputs.sdk-path }}
         ANDROID_SDK_ROOT: ${{ steps.setup-android.outputs.sdk-path }}
