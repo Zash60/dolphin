@@ -265,6 +265,9 @@
 
     <!-- Internal Resolution Preference -->
     <string-array name="internalResolutionEntries">
+        <item>@string/resolution_quarter_native</item>
+        <item>@string/resolution_half_native</item>
+        <item>@string/resolution_threequarters_native</item>
         <item>@string/resolution_one_native</item>
         <item>@string/resolution_two_native</item>
         <item>@string/resolution_three_native</item>
@@ -279,6 +282,9 @@
         <item>4</item>
         <item>5</item>
         <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
     </integer-array>
 
     <!-- FSAA Preference -->
