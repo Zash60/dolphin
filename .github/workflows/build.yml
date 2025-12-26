@@ -43,6 +43,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
           
+    - name: Create local.properties
+      run: echo "sdk.dir=${{ steps.setup-android.outputs.sdk-path }}" > ./Source/Android/local.properties
+      
     - name: Build Debug APK
       run: chmod +x gradlew && ./gradlew assembleDebug
       working-directory: ./Source/Android
