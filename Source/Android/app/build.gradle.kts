@@ -25,12 +25,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    compilerOptions {
-        configureKotlin {
-            jvmTarget = JvmTarget.JVM_17
-        }
-    }
-
     lint {
         // This is important as it will run lint but not abort on error
         // Lint has some overly obnoxious "errors" that should really be warnings
@@ -121,6 +115,12 @@ android {
 
     packaging {
         jniLibs.useLegacyPackaging = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
